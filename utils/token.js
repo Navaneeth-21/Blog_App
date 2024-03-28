@@ -11,6 +11,7 @@ const createToken = (id) => {
     });
 };
 
+// ;ddvmkasddpk
 // verifying the generated token
 const validateToken = (req, res, next) => {
     const token = req.cookies.token;
