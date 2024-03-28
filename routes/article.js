@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Schema = require('../models/article');
+const User = require('../models/user');
+const { createToken, validateToken } = require('../utils/token');
 
 
 router.get('/new_article', (req, res) => {
@@ -34,11 +36,11 @@ router.put('/:id', async (req, res) => {
   try {
     let article = await Schema.findByIdAndUpdate(req.params.id);
     if (article) {
-        article.title = req.body.title,
+      article.title = req.body.title,
         article.description = req.body.description,
         article.markdown = req.body.markdown,
 
-      await article.save();
+        await article.save();
 
       res.redirect(`/articles/${article.slug}`);
     }
@@ -55,12 +57,17 @@ router.put('/:id', async (req, res) => {
 });
 
 
-router.post('/', async (req, res) => {
+router.post('/', validateToken, async (req, res) => {
+
+  const userID = await User.findById(req.user.id);
+
   try {
+
     let article = new Schema({
       title: req.body.title,
       description: req.body.description,
       markdown: req.body.markdown,
+      userID: userID
     });
 
     await article.save();
@@ -84,7 +91,7 @@ router.delete('/:id', async (req, res) => {
     if (!article) {
       return res.status(404).json({ msg: "No such article" });
     }
-    res.redirect('/');
+    res.redirect('/articles');
 
   } catch (error) {
 

@@ -30,6 +30,10 @@ const createSchema = new mongoose.Schema({
     sanitizedHtml:{
         type : String,
         required : true,
+    },
+    userID: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'users'
     }
 });
 
