@@ -10,8 +10,6 @@ const createToken = (id) => {
         expiresIn: 3 * 24 * 60 * 60,
     });
 };
-
-// ;ddvmkasddpk
 // verifying the generated token
 const validateToken = (req, res, next) => {
     const token = req.cookies.token;
